@@ -1,0 +1,162 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="소스 파일">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="헤더 파일">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="리소스 파일">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx</Extensions>
+    </Filter>
+    <Filter Include="소스 파일\Network">
+      <UniqueIdentifier>{1b80b7d9-3a59-4e96-8bbc-155f23f57c8f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\Util">
+      <UniqueIdentifier>{4e7b354c-1b1b-4a3c-88ed-3a1631197a75}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\Network\EventSelect">
+      <UniqueIdentifier>{2dab96e1-fc55-48c4-afa9-32a8737a8786}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\Network\Iocp">
+      <UniqueIdentifier>{64431903-bc03-453c-a1e9-03c4d0b810bd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\Network\Msg">
+      <UniqueIdentifier>{31f98476-b582-434e-a45b-31c6e7447308}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\Util\DataStruct">
+      <UniqueIdentifier>{c4df2ac3-5cec-4e9d-a9c1-551c4c8df0ae}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\Util\MiniDump">
+      <UniqueIdentifier>{9772dab6-a379-49e6-b618-e668fe9b7d80}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\Util\IniReader">
+      <UniqueIdentifier>{14cbccca-0ddf-4697-9bf2-62c04a57f9df}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\Util\Pattern">
+      <UniqueIdentifier>{aacf9932-457c-49b6-a0e0-ada08de9695c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\Util\StringFunc">
+      <UniqueIdentifier>{6d0de92b-42c6-4a4f-9366-bc576cf89597}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\Util\DataStruct\Stack">
+      <UniqueIdentifier>{4f3b9318-7748-4c13-80df-f20c04f468af}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\Util\DataStruct\Queue">
+      <UniqueIdentifier>{5a7a5512-27c5-4c0a-8e68-aaf5ea8e5e54}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\Util\DataStruct\LinkedList">
+      <UniqueIdentifier>{7fda26e7-be10-4fe4-9064-a333350aed8d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\Util\DataStruct\Deque">
+      <UniqueIdentifier>{f41c6500-c376-4b0b-ac28-29dcbc8013c2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\Util\Thread">
+      <UniqueIdentifier>{4cdf51fb-0884-4eae-9a83-f6cc96acf3a5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\Util\Memory">
+      <UniqueIdentifier>{58e69bfb-f923-494b-a1ea-10b9c6d4c4a3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\Util\Log">
+      <UniqueIdentifier>{776af9d3-dbf7-4628-935e-57e23e37bded}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="EventSelect.cpp">
+      <Filter>소스 파일\Network\EventSelect</Filter>
+    </ClCompile>
+    <ClCompile Include="Iocp.cpp">
+      <Filter>소스 파일\Network\Iocp</Filter>
+    </ClCompile>
+    <ClCompile Include="Msg.cpp">
+      <Filter>소스 파일\Network\Msg</Filter>
+    </ClCompile>
+    <ClCompile Include="Network.cpp">
+      <Filter>소스 파일\Network</Filter>
+    </ClCompile>
+    <ClCompile Include="NetworkPacket.cpp">
+      <Filter>소스 파일\Network</Filter>
+    </ClCompile>
+    <ClCompile Include="stdafx.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="IniReader.cpp">
+      <Filter>소스 파일\Util\IniReader</Filter>
+    </ClCompile>
+    <ClCompile Include="MiniDump.cpp">
+      <Filter>소스 파일\Util\MiniDump</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="EventSelect.h">
+      <Filter>소스 파일\Network\EventSelect</Filter>
+    </ClInclude>
+    <ClInclude Include="Iocp.h">
+      <Filter>소스 파일\Network\Iocp</Filter>
+    </ClInclude>
+    <ClInclude Include="MiniDump.h">
+      <Filter>소스 파일\Util\MiniDump</Filter>
+    </ClInclude>
+    <ClInclude Include="Msg.h">
+      <Filter>소스 파일\Network\Msg</Filter>
+    </ClInclude>
+    <ClInclude Include="Network.h">
+      <Filter>소스 파일\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="NetworkPacket.h">
+      <Filter>소스 파일\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="stdafx.h">
+      <Filter>소스 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Singleton.h">
+      <Filter>소스 파일\Util\Pattern</Filter>
+    </ClInclude>
+    <ClInclude Include="StringFunc.h">
+      <Filter>소스 파일\Util\StringFunc</Filter>
+    </ClInclude>
+    <ClInclude Include="IniReader.h">
+      <Filter>소스 파일\Util\IniReader</Filter>
+    </ClInclude>
+    <ClInclude Include="Stack.h">
+      <Filter>소스 파일\Util\DataStruct\Stack</Filter>
+    </ClInclude>
+    <ClInclude Include="Queue.h">
+      <Filter>소스 파일\Util\DataStruct\Queue</Filter>
+    </ClInclude>
+    <ClInclude Include="LinkedList.h">
+      <Filter>소스 파일\Util\DataStruct\LinkedList</Filter>
+    </ClInclude>
+    <ClInclude Include="Deque.h">
+      <Filter>소스 파일\Util\DataStruct\Deque</Filter>
+    </ClInclude>
+    <ClInclude Include="CircularLinkedList.h">
+      <Filter>소스 파일\Util\DataStruct\LinkedList</Filter>
+    </ClInclude>
+    <ClInclude Include="DataStruct.h">
+      <Filter>소스 파일\Util\DataStruct</Filter>
+    </ClInclude>
+    <ClInclude Include="CriticalSection.h">
+      <Filter>소스 파일\Util\Thread</Filter>
+    </ClInclude>
+    <ClInclude Include="ThreadSync.h">
+      <Filter>소스 파일\Util\Thread</Filter>
+    </ClInclude>
+    <ClInclude Include="MemoryPool.h">
+      <Filter>소스 파일\Util\Memory</Filter>
+    </ClInclude>
+    <ClInclude Include="AutodetectMemoryLeak.h">
+      <Filter>소스 파일\Util\Memory</Filter>
+    </ClInclude>
+    <ClInclude Include="Log.h">
+      <Filter>소스 파일\Util\Log</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ReadMe.txt" />
+  </ItemGroup>
+</Project>
