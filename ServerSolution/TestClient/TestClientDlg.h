@@ -11,6 +11,7 @@ class CTestClientDlg : public CDialogEx
 // 생성입니다.
 public:
 	CTestClientDlg(CWnd* pParent = NULL);	// 표준 생성자입니다.
+	~CTestClientDlg();
 
 // 대화 상자 데이터입니다.
 #ifdef AFX_DESIGN_TIME
@@ -24,7 +25,6 @@ public:
 	void LogView(CString log_str);
 	void ChatView(CString chat_str);
 
-	void SetUserInfo(DWORD user_id, std::wstring nick) { user_id_ = user_id; user_nick_ = nick; };
 	void UserConnected(CString connect_user_nick);
 	void UserDisConnected(CString disconnect_user_nick);
 
@@ -48,15 +48,6 @@ private:
 	CString user_list_str_;
 	std::list<CString> connect_users_;
 	
-	std::wstring version_;	
-	std::wstring user_nick_;
-	std::wstring ip_;
-	DWORD connect_error_;
-	DWORD user_id_;
-	DWORD port_;
-	bool is_connected_;
-	bool version_check_;
-
 	CEdit log_view_;
 	CEdit reg_id_;
 	CEdit reg_nick_;

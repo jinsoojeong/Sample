@@ -15,7 +15,7 @@ public:
 		if (pInstance_ == nullptr)
 		{
 			pInstance_ = new T;
-			atexit(destroy); // 종료 함수 등록
+			atexit(Destroy); // 종료 함수 등록
 		}
 
 		return *pInstance_;
@@ -26,17 +26,17 @@ public:
 		if (pInstance_ == nullptr)
 		{
 			pInstance_ = new T;
-			atexit(destroy); // 종료 함수 등록
+			atexit(Destroy); // 종료 함수 등록
 		}
 
 		return pInstance_;
 	}
 
-	static void destroy()
+	static void Destroy()
 	{
 		if (pInstance_ != nullptr)
 		{
-			delete pInstance_;
+			SAFE_DELETE(pInstance_);
 			// 객체 소멸
 		}
 	}

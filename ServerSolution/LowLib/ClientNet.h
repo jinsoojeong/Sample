@@ -6,7 +6,7 @@ public:
 	ClientNet();
 	virtual ~ClientNet();
 
-	bool Initialize(std::string& ip, WORD port);
+	bool Initialize(const std::string& ip, WORD port);
 
 	bool GetIP(std::string& ip);
 	WORD GetPort();
@@ -17,11 +17,13 @@ public:
 protected:
 	void OnIoRead();
 	void OnIoWrote() {};
+	void OnIoConnected() {};
+	void OnIoDisconnected() {};
 
 	virtual void TestClientLog(wchar_t* words, ...) = 0;
 	virtual void MsgHandle() = 0;
 
 private:
-	NetworkPacket* network_packet_;
-	Concurrency::concurrent_queue<Msg*> read_msg_queue_;
+	PacketSystem *packet_system_;
+	Concurrency::concurrent_queue<Msg*> client_msg_queue_;
 };

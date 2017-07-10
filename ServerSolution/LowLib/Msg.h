@@ -210,8 +210,11 @@ public:
 	const BYTE*	GetBuffer();
 
 	void SetBuffer(BYTE* buffer) { buffer_ = buffer; }
+	void SetSessionID(DWORD session_id) { session_id_ = session_id; }
+	DWORD GetSessionID() { return session_id_; }
 
 private:
+	DWORD session_id_;
 	DWORD offset_;
 	DWORD protocol_id_;
 	BYTE *buffer_;

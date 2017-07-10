@@ -2,15 +2,12 @@
 #include "ClientSession.h"
 #include "TestClientDlg.h"
 
-BOOL ClientSession::Initialize(std::string ip, WORD port)
+ClientSession::ClientSession() : connect_error_(0), user_id_(0), client_state_(InitState)
 {
-	WSADATA WsaData;
-	WSAStartup(MAKEWORD(2, 2), &WsaData);
+}
 
-	if (ClientNet::Initialize(ip, port) == FALSE)
-		return FALSE;
-
-	return TRUE;
+ClientSession::~ClientSession()
+{
 }
 
 bool ClientSession::SendCheckVersionReq(const std::wstring& client_version)
@@ -41,16 +38,6 @@ bool ClientSession::SendChatReq(const std::wstring& chat)
 	return SendMsg(req_msg);
 }
 
-void ClientSession::OnIoConnected()
-{
-	return;
-}
-
-void ClientSession::OnIoDisconnected()
-{
-	return;
-}
-
 void ClientSession::TestClientLog(wchar_t* words, ...)
 {
 	TCHAR buff[1024] = { 0, };
@@ -65,7 +52,8 @@ void ClientSession::TestClientLog(wchar_t* words, ...)
 
 void ClientSession::SetUserInfo(DWORD user_id, std::wstring nick)
 {
-	((CTestClientDlg*)AfxGetApp()->m_pMainWnd)->SetUserInfo(user_id, nick);
+	user_id_ = user_id;
+	user_nick_ = nick;
 }
 
 void ClientSession::NewUserConnect(std::wstring new_user_nick)
@@ -118,7 +106,7 @@ void ClientSession::MsgHandle()
 			TestClientLog(L"REG SUCCEED : USER_ID:[%d], USER_NICK:[%s]", reg_user_ack.id, reg_user_ack.nick.c_str());
 			SetUserInfo(reg_user_ack.id, reg_user_ack.nick);
 
-			for each (std::vector<std::wstring>::value_type itor in reg_user_ack.connect_users)
+			for each (const std::vector<std::wstring>::value_type& itor in reg_user_ack.connect_users)
 				NewUserConnect(itor);
 		}
 		else
@@ -173,4 +161,186 @@ void ClientSession::MsgHandle()
 	}
 
 	SAFE_DELETE(msg);
+}
+
+bool ClientSession::Init()
+{
+	WSADATA WsaData;
+	WSAStartup(MAKEWORD(2, 2), &WsaData);
+
+	IniReader ini_reader_;
+	DWORD buffer_length;
+	if (ini_reader_.Initialize(std::wstring(L"./ClientConfig.ini")) == false)
+	{
+		TestClientLog(L"---- Client Config Initialize Failed ----");
+		connect_error_ = 1;
+		return false;
+	}
+
+	ini_reader_.LoadConfigData(L"CLIENT", L"IP", ip_, &buffer_length);
+
+	if (ip_.empty())
+	{
+		TestClientLog(L"---- Client Config Initialize Failed - ip load failed ----");
+		connect_error_ = 2;
+		return false;
+	}
+
+	ini_reader_.LoadConfigData(L"CLIENT", L"PORT", &port_);
+
+	if (port_ == 0)
+	{
+		TestClientLog(L"---- Client Config Initialize Failed - port load failed ----");
+		connect_error_ = 3;
+		return false;
+	}
+
+	ini_reader_.LoadConfigData(L"CLIENT", L"VERSION", version_, &buffer_length);
+
+	if (version_.empty())
+	{
+		TestClientLog(L"---- Client Config Initialize Failed - version load failed ----");
+		connect_error_ = 4;
+		return false;	
+	}
+
+	if (Connect() == false)
+		return false;
+
+	return true;
+}
+
+bool ClientSession::Connect()
+{
+	if (client_state_ != InitState)
+	{
+		TestClientLog(L"connect failed - action denied invalid client state:[%d]", client_state_);
+		return false;
+	}
+
+	USES_CONVERSION;
+
+	if (ClientNet::Initialize(W2A(ip_.c_str()), static_cast<WORD>(port_)) == false)
+	{
+		TestClientLog(L"---- Client Session Initialize Failed ----");
+		connect_error_ = 5;
+		return false;
+	}		
+
+	TestClientLog(L"---- Client Session Initialize Succeed ----");
+	SetClientState(ConnectedState);
+
+	return true;
+}
+
+bool ClientSession::VersionCheck()
+{
+	if (client_state_ != ConnectedState)
+	{
+		TestClientLog(L"version check failed - action denied invalid client state:[%d]", client_state_);
+		return false;
+	}
+
+	if (connect_error_ != 0)
+	{
+		TestClientLog(L"client connect initialize faild - connect error : [%d]", connect_error_);
+		return false;
+	}
+
+	// 패킷을 전송합니다.
+	std::wstring client_version = L"1.0.0.1";
+	if (SendCheckVersionReq(client_version) == false)
+	{
+		TestClientLog(L"SendCheckVersionReq - connect error");
+		connect_error_ = 6;
+		return false;
+	}
+
+	SetClientState(RunningState);
+	return true;
+}
+
+bool ClientSession::UserLogin(const std::wstring ticket)
+{
+	if (client_state_ != RunningState)
+	{
+		TestClientLog(L"user login failed - action denied invalid client state:[%d]", client_state_);
+		return false;
+	}
+
+	if (connect_error_ != 0)
+	{
+		TestClientLog(L"client connect initialize faild - connect error : [%d]", connect_error_);
+		return false;
+	}
+
+	if (user_id_ != 0 || user_nick_.compare(L"") != 0)
+	{
+		TestClientLog(L"client already reg user - user_id : [%d], nick : [%s]", user_id_, user_nick_.c_str());
+		return false;
+	}
+	
+	if (SendRegUserReq(ticket) == false)
+		return false;
+
+	SetClientState(LoginState);
+	return true;
+}
+
+bool ClientSession::UserLogOut()
+{
+	if (client_state_ != LoginState)
+	{
+		TestClientLog(L"user logout failed - action denied invalid client state:[%d]", client_state_);
+		return false;
+	}
+
+	if (connect_error_ != 0)
+	{
+		TestClientLog(L"client connect initialize faild - connect error : [%d]", connect_error_);
+		return false;
+	}
+
+	if (user_id_ == 0 && user_nick_.compare(L"") == 0)
+	{
+		TestClientLog(L"client already unreg user - user_id : [%d], nick : [%s]", user_id_, user_nick_.c_str());
+		return false;
+	}
+
+	// 패킷을 전송합니다.
+
+	if (SendUnRegUserReq(user_id_) == false)
+		return false;
+
+	SetUserInfo(0, L"");
+	SetClientState(RunningState);
+	return true;
+}
+
+bool ClientSession::SendChatText(const std::wstring text)
+{
+	if (client_state_ != LoginState)
+	{
+		TestClientLog(L"send chat text failed - action denied invalid client state:[%d]", client_state_);
+		return false;
+	}
+
+	if (connect_error_ != 0)
+	{
+		TestClientLog(L"client connect initialize faild - connect error : [%d]", connect_error_);
+		return false;
+	}
+
+	if (user_id_ == 0 && user_nick_.compare(L"") == 0)
+	{
+		TestClientLog(L"client not reg user - user_id : [%d], nick : [%s]", user_id_, user_nick_.c_str());
+		return false;
+	}
+
+	std::wstring chat = user_nick_ + L" : " + text;
+
+	if (SendChatReq(chat) == false)
+		return false;
+
+	return true;
 }

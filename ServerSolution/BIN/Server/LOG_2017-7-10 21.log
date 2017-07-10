@@ -1,0 +1,49 @@
+[2017-7-10 21:48:26] Server Start
+[2017-7-10 21:48:26] Server Iocp Start
+[2017-7-10 21:48:26] IP : 127.0.0.1
+[2017-7-10 21:48:26] PORT : 1822
+[2017-7-10 21:48:26] INIT_SESSION_COUNT : 1
+[2017-7-10 21:48:26] MAX_SESSION_COUNT : 100
+[2017-7-10 21:48:27] Main Process Start
+[2017-7-10 21:48:27] VERSION : 1.0.0.1
+[2017-7-10 21:48:31] Session Connect : [1551413563136]
+[2017-7-10 21:48:31] Session Connect : [1551413752752]
+[2017-7-10 21:48:36] Read Msg Session:[1551413563136], Protocol:[16777220]
+[2017-7-10 21:48:36] Client Check Version Succeed
+[2017-7-10 21:48:36] Read Msg Session:[1551413563136], Protocol:[16777222]
+[2017-7-10 21:48:36] Regist User Succeed
+[2017-7-10 21:48:56] KEEP ALIVE SESSION CHECK
+[2017-7-10 21:49:8] Session DisConnect User UnRegist : User_ID:[1]
+[2017-7-10 21:49:8] Session DisConnect : [1551413563136]
+[2017-7-10 21:49:16] Session Connect : [1551413563136]
+[2017-7-10 21:49:26] KEEP ALIVE SESSION CHECK
+[2017-7-10 21:49:35] Session Connect : [1551413750352]
+[2017-7-10 21:49:37] Read Msg Session:[1551413750352], Protocol:[16777220]
+[2017-7-10 21:49:37] Client Check Version Succeed
+[2017-7-10 21:49:41] Read Msg Session:[1551413750352], Protocol:[16777222]
+[2017-7-10 21:49:41] Regist User Succeed
+[2017-7-10 21:49:48] Read Msg Session:[1551413750352], Protocol:[16777228]
+[2017-7-10 21:49:56] KEEP ALIVE SESSION CHECK
+[2017-7-10 21:50:2] Read Msg Session:[1551413752752], Protocol:[16777220]
+[2017-7-10 21:50:2] Client Check Version Succeed
+[2017-7-10 21:50:3] Read Msg Session:[1551413752752], Protocol:[16777222]
+[2017-7-10 21:50:3] Regist User Succeed
+[2017-7-10 21:50:16] Read Msg Session:[1551413752752], Protocol:[16777224]
+[2017-7-10 21:50:16] UnRegist User Succeed
+[2017-7-10 21:50:17] Read Msg Session:[1551413752752], Protocol:[16777222]
+[2017-7-10 21:50:17] Regist User Succeed
+[2017-7-10 21:50:18] Read Msg Session:[1551413752752], Protocol:[16777224]
+[2017-7-10 21:50:18] UnRegist User Succeed
+[2017-7-10 21:50:19] Read Msg Session:[1551413752752], Protocol:[16777222]
+[2017-7-10 21:50:19] Regist User Succeed
+[2017-7-10 21:50:21] Read Msg Session:[1551413750352], Protocol:[16777224]
+[2017-7-10 21:50:21] UnRegist User Succeed
+[2017-7-10 21:50:21] Read Msg Session:[1551413750352], Protocol:[16777222]
+[2017-7-10 21:50:21] Regist User Succeed
+[2017-7-10 21:50:26] KEEP ALIVE SESSION CHECK
+[2017-7-10 21:50:30] Read Msg Session:[1551413750352], Protocol:[16777228]
+[2017-7-10 21:50:31] Session DisConnect User UnRegist : User_ID:[1]
+[2017-7-10 21:50:31] Session DisConnect : [1551413750352]
+[2017-7-10 21:50:34] Read Msg Session:[1551413752752], Protocol:[16777228]
+[2017-7-10 21:50:36] Session DisConnect User UnRegist : User_ID:[2]
+[2017-7-10 21:50:36] Session DisConnect : [1551413752752]

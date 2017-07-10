@@ -1,27 +1,47 @@
 #pragma once
 
-template <class T>
-class ThreadSync
+class SyncObject 
 {
-	friend class TS_CRETICAL_SECSION;
 public:
-	class TS_CRETICAL_SECSION
-	{
-	public:
-		TS_CRETICAL_SECSION()
-		{
-			T::critical_section.Lock();
-		}
+	SyncObject() {};
+	virtual ~SyncObject() {};
 
-		~TS_CRETICAL_SECSION()
-		{
-			T::critical_section.UnLock();
-		}
-	};
-
-private:
-	static CriticalSection critical_section;
+	virtual void Lock() {};
+	virtual void UnLock() {};
 };
 
-template <class T>
-CriticalSection ThreadSync<T>::critical_section;
+class CriticalSection : public SyncObject
+{
+public:
+	CriticalSection() : SyncObject() 
+	{ 
+		InitializeCriticalSection(&sc_); 
+	}
+	~CriticalSection() { DeleteCriticalSection(&sc_); }
+
+	void Lock() override { EnterCriticalSection(&sc_); }
+	void UnLock() override { LeaveCriticalSection(&sc_); }
+
+private:
+	CRITICAL_SECTION sc_;
+};
+
+class ScopedLock
+{
+public:
+	ScopedLock(SyncObject* sync_object) : sync_object_(sync_object)
+	{ 
+		if (sync_object_)
+			sync_object_->Lock(); 
+	}
+	~ScopedLock() 
+	{ 
+		if (sync_object_)
+			sync_object_->UnLock(); 
+	}
+
+private:
+	SyncObject* sync_object_;
+};
+
+#define SCOPED_SINGLE_LOCK(x) ScopedLock scoped_lock(x)

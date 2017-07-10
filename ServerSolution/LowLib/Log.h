@@ -3,6 +3,8 @@
 class Log
 {
 public:
+	#define MAX_BUFFER_LENGTH	4096
+
 	static bool	ReportLog(wchar_t* data, ...)
 	{
 		va_list	va;

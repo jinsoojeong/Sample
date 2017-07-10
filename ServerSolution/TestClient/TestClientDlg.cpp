@@ -49,9 +49,15 @@ END_MESSAGE_MAP()
 // CTestClientDlg 대화 상자
 
 CTestClientDlg::CTestClientDlg(CWnd* pParent /*=NULL*/)
-	: CDialogEx(IDD_TESTCLIENT_DIALOG, pParent), client_session_(nullptr), is_connected_(false), connect_error_(0), user_id_(0), version_check_(false)
+	: CDialogEx(IDD_TESTCLIENT_DIALOG, pParent), client_session_(nullptr)
 {
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
+}
+
+CTestClientDlg::~CTestClientDlg()
+{
+	DELETE_TASK_MANAGER;
+	SAFE_DELETE(client_session_);
 }
 
 void CTestClientDlg::DoDataExchange(CDataExchange* pDX)
@@ -108,37 +114,14 @@ BOOL CTestClientDlg::OnInitDialog()
 	SetIcon(m_hIcon, FALSE);		// 작은 아이콘을 설정합니다.
 
 	// TODO: 여기에 추가 초기화 작업을 추가합니다.
-	IniReader ini_reader_;
-	DWORD buffer_length;
-	if (ini_reader_.Initialize(std::wstring(L"./ClientConfig.ini")) == false)
-	{
-		LogView(_T("---- Client Config Initialize Failed ----"));
-		connect_error_ = 1;
-	}
+	client_session_ = new ClientSession;
+	//client_session_->Initialize();
 
-	ini_reader_.LoadConfigData(L"CLIENT", L"IP", ip_, &buffer_length);
+	if (TASK_MANAGER.CreateTask(TASK_EVENT_SELECT, 1, client_session_, 0, 0) == false)
+		return false;
 
-	if (ip_.empty())
-	{
-		LogView(_T("---- Client Config Initialize Failed - ip load failed ----"));
-		connect_error_ = 2;
-	}
-
-	ini_reader_.LoadConfigData(L"CLIENT", L"PORT", &port_);
-
-	if (port_ == 0)
-	{
-		LogView(_T("---- Client Config Initialize Failed - port load failed ----"));
-		connect_error_ = 3;
-	}
-
-	ini_reader_.LoadConfigData(L"CLIENT", L"VERSION", version_, &buffer_length);
-
-	if (version_.empty())
-	{
-		LogView(_T("---- Client Config Initialize Failed - version load failed ----"));
-		connect_error_ = 4;
-	}
+	if (TASK_MANAGER.StartTaskJob(TASK_EVENT_SELECT) == false)
+		return false;
 
 	return TRUE;  // 포커스를 컨트롤에 설정하지 않으면 TRUE를 반환합니다.
 }
@@ -265,67 +248,42 @@ void CTestClientDlg::UserDisConnected(CString disconnect_user_nick)
 
 	connect_users_.remove(disconnect_user_nick);
 
-	for each(std::list<CString>::value_type itor in connect_users_)
+	for each(const std::list<CString>::value_type& itor in connect_users_)
 		UserConnected(itor);
+}
+
+void CTestClientDlg::OnBnClickedConnect()
+{
+	//if (client_session_ == nullptr)
+	//{
+	//	LogView(_T("---- Connect Failed - Client Session NullPtr ----"));
+	//	return;
+	//}
+
+	//if (client_session_->Connect() == false)
+	//	return;
 }
 
 void CTestClientDlg::OnBnClickedVersionCert()
 {
-	if (is_connected_ == false)
+	if (client_session_ == nullptr)
 	{
-		LogView(_T("client not connected server"));
+		LogView(_T("---- Version Check Failed - Client Session NullPtr ----"));
 		return;
 	}
 
-	if (version_check_ == true)
-	{
-		LogView(_T("client already version check"));
+	if (client_session_->VersionCheck() == false)
 		return;
-	}
-
-	if (connect_error_ != 0)
-	{
-		LogView(_T("client connect initialize faild - connect error : [%d]"), connect_error_);
-		return;
-	}
-
-	// 패킷을 전송합니다.
-	std::wstring client_version = L"1.0.0.1";
-	if (client_session_->SendCheckVersionReq(client_version) == false)
-	{
-		LogView(_T("SendCheckVersionReq - connect error"));
-		return;
-	}
-
-	version_check_ = true;
 }
 
 void CTestClientDlg::OnBnClickedUserReg()
 {
-	if (is_connected_ == false)
+	if (client_session_ == nullptr)
 	{
-		LogView(_T("client not connected server"));
+		LogView(_T("---- User Login Failed - Client Session NullPtr ----"));
 		return;
 	}
 
-	if (version_check_ == false)
-	{
-		LogView(_T("client not version check"));
-		return;
-	}
-
-	if (connect_error_ != 0)
-	{
-		LogView(_T("client connect initialize faild - connect error : [%d]"), connect_error_);
-		return;
-	}
-
-	if (user_id_ != 0 || user_nick_.compare(L"") != 0)
-	{
-		LogView(_T("client already reg user - user_id : [%d], nick : [%s]"), user_id_, user_nick_.c_str());
-		return;
-	}
-	
 	// 패킷을 전송합니다.
 	CString cstr_id;
 	reg_id_.GetWindowText(cstr_id);
@@ -343,104 +301,35 @@ void CTestClientDlg::OnBnClickedUserReg()
 	cstr_ticket.Format(L"%s|%s", cstr_id, cstr_pw);
 
 	std::wstring ticket = cstr_ticket.operator LPCWSTR();
-	client_session_->SendRegUserReq(ticket);		
+
+	if (client_session_->UserLogin(ticket) == false)
+		return;
 }
 
 void CTestClientDlg::OnBnClickedLogout()
 {
-	if (is_connected_ == false)
+	if (client_session_ == nullptr)
 	{
-		LogView(_T("client not connected server"));
+		LogView(_T("---- User Logout Failed - Client Session NullPtr ----"));
 		return;
 	}
 
-	if (version_check_ == false)
-	{
-		LogView(_T("client not version check"));
+	if (client_session_->UserLogOut() == false)
 		return;
-	}
 
-	if (connect_error_ != 0)
-	{
-		LogView(_T("client connect initialize faild - connect error : [%d]"), connect_error_);
-		return;
-	}
-
-	if (user_id_ == 0 && user_nick_.compare(L"") == 0)
-	{
-		LogView(_T("client already unreg user - user_id : [%d], nick : [%s]"), user_id_, user_nick_.c_str());
-		return;
-	}
-
-	chat_view_.SetWindowText(L"");
-	chat_str_.SetWindowText(L"");
-	user_list_view_.SetWindowText(L"");
 	chat_ = "";
 	user_list_str_ = "";
 	connect_users_.clear();
-
-	// 패킷을 전송합니다.
-	client_session_->SendUnRegUserReq(user_id_);
-}
-
-void CTestClientDlg::OnBnClickedConnect()
-{
-	if (is_connected_)
-	{
-		LogView(_T("client is already connected server"));
-		return;
-	}
-
-	if (version_check_ == true)
-	{
-		LogView(_T("client invalid - already version check"));
-		return;
-	}
-
-	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
-	USES_CONVERSION;
-
-	if (client_session_ == nullptr)
-	{
-		client_session_ = new ClientSession();
-
-		if (client_session_->Initialize(W2A(ip_.c_str()), DEFAULT_PORT) == FALSE)
-		{
-			LogView(_T("---- Client Session Initialize Failed ----"));
-			connect_error_ = 5;
-		}
-		else
-		{ 
-			LogView(L"---- Client Session Initialize Succeed ----");
-			is_connected_ = true;
-		}
-	}
+	chat_view_.SetWindowText(L"");
+	chat_str_.SetWindowText(L"");
+	user_list_view_.SetWindowText(L"");
 }
 
 void CTestClientDlg::OnBnClickedChatSend()
 {
-	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
-	if (is_connected_ == false)
+	if (client_session_ == nullptr)
 	{
-		LogView(_T("client not connected server"));
-		return;
-	}
-
-	if (version_check_ == false)
-	{
-		LogView(_T("client not version check"));
-		return;
-	}
-
-	if (connect_error_ != 0)
-	{
-		LogView(_T("client connect initialize faild - connect error : [%d]"), connect_error_);
-		return;
-	}
-
-	if (user_id_ == 0 && user_nick_.compare(L"") == 0)
-	{
-		LogView(_T("client not reg user - user_id : [%d], nick : [%s]"), user_id_, user_nick_.c_str());
+		LogView(_T("---- User Logout Failed - Client Session NullPtr ----"));
 		return;
 	}
 
@@ -448,8 +337,10 @@ void CTestClientDlg::OnBnClickedChatSend()
 	CString cstr_chat;
 	chat_str_.GetWindowText(cstr_chat);
 
-	std::wstring chat = user_nick_ + L" : " + cstr_chat.operator LPCWSTR();
-	client_session_->SendChatReq(chat);
+	std::wstring text = cstr_chat.operator LPCWSTR();
+
+	if (client_session_->SendChatText(text) == false)
+		return;
 
 	chat_str_.SetWindowText(L"");
 }

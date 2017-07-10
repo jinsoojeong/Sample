@@ -55,11 +55,14 @@
     <Filter Include="소스 파일\Util\DataStruct\Deque">
       <UniqueIdentifier>{f41c6500-c376-4b0b-ac28-29dcbc8013c2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\Util\Memory">
+      <UniqueIdentifier>{58e69bfb-f923-494b-a1ea-10b9c6d4c4a3}</UniqueIdentifier>
+    </Filter>
     <Filter Include="소스 파일\Util\Thread">
       <UniqueIdentifier>{4cdf51fb-0884-4eae-9a83-f6cc96acf3a5}</UniqueIdentifier>
     </Filter>
-    <Filter Include="소스 파일\Util\Memory">
-      <UniqueIdentifier>{58e69bfb-f923-494b-a1ea-10b9c6d4c4a3}</UniqueIdentifier>
+    <Filter Include="소스 파일\Network\Session">
+      <UniqueIdentifier>{8868b000-18ab-4918-be28-64cc8ff6260f}</UniqueIdentifier>
     </Filter>
     <Filter Include="소스 파일\Util\Log">
       <UniqueIdentifier>{776af9d3-dbf7-4628-935e-57e23e37bded}</UniqueIdentifier>
@@ -75,12 +78,6 @@
     <ClCompile Include="Msg.cpp">
       <Filter>소스 파일\Network\Msg</Filter>
     </ClCompile>
-    <ClCompile Include="Network.cpp">
-      <Filter>소스 파일\Network</Filter>
-    </ClCompile>
-    <ClCompile Include="NetworkPacket.cpp">
-      <Filter>소스 파일\Network</Filter>
-    </ClCompile>
     <ClCompile Include="stdafx.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
@@ -89,6 +86,30 @@
     </ClCompile>
     <ClCompile Include="MiniDump.cpp">
       <Filter>소스 파일\Util\MiniDump</Filter>
+    </ClCompile>
+    <ClCompile Include="Thread.cpp">
+      <Filter>소스 파일\Util\Thread</Filter>
+    </ClCompile>
+    <ClCompile Include="ThreadManager.cpp">
+      <Filter>소스 파일\Util\Thread</Filter>
+    </ClCompile>
+    <ClCompile Include="Task.cpp">
+      <Filter>소스 파일\Util\Thread</Filter>
+    </ClCompile>
+    <ClCompile Include="TaskManager.cpp">
+      <Filter>소스 파일\Util\Thread</Filter>
+    </ClCompile>
+    <ClCompile Include="SockSystem.cpp">
+      <Filter>소스 파일\Network</Filter>
+    </ClCompile>
+    <ClCompile Include="PacketSystem.cpp">
+      <Filter>소스 파일\Network</Filter>
+    </ClCompile>
+    <ClCompile Include="Session.cpp">
+      <Filter>소스 파일\Network\Session</Filter>
+    </ClCompile>
+    <ClCompile Include="SessionManager.cpp">
+      <Filter>소스 파일\Network\Session</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -103,12 +124,6 @@
     </ClInclude>
     <ClInclude Include="Msg.h">
       <Filter>소스 파일\Network\Msg</Filter>
-    </ClInclude>
-    <ClInclude Include="Network.h">
-      <Filter>소스 파일\Network</Filter>
-    </ClInclude>
-    <ClInclude Include="NetworkPacket.h">
-      <Filter>소스 파일\Network</Filter>
     </ClInclude>
     <ClInclude Include="stdafx.h">
       <Filter>소스 파일</Filter>
@@ -140,9 +155,6 @@
     <ClInclude Include="DataStruct.h">
       <Filter>소스 파일\Util\DataStruct</Filter>
     </ClInclude>
-    <ClInclude Include="CriticalSection.h">
-      <Filter>소스 파일\Util\Thread</Filter>
-    </ClInclude>
     <ClInclude Include="ThreadSync.h">
       <Filter>소스 파일\Util\Thread</Filter>
     </ClInclude>
@@ -154,6 +166,33 @@
     </ClInclude>
     <ClInclude Include="Log.h">
       <Filter>소스 파일\Util\Log</Filter>
+    </ClInclude>
+    <ClInclude Include="Thread.h">
+      <Filter>소스 파일\Util\Thread</Filter>
+    </ClInclude>
+    <ClInclude Include="Task.h">
+      <Filter>소스 파일\Util\Thread</Filter>
+    </ClInclude>
+    <ClInclude Include="ThreadManager.h">
+      <Filter>소스 파일\Util\Thread</Filter>
+    </ClInclude>
+    <ClInclude Include="TaskManager.h">
+      <Filter>소스 파일\Util\Thread</Filter>
+    </ClInclude>
+    <ClInclude Include="ProcessObject.h">
+      <Filter>소스 파일\Util\Thread</Filter>
+    </ClInclude>
+    <ClInclude Include="SockSystem.h">
+      <Filter>소스 파일\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="PacketSystem.h">
+      <Filter>소스 파일\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="Session.h">
+      <Filter>소스 파일\Network\Session</Filter>
+    </ClInclude>
+    <ClInclude Include="SessionManager.h">
+      <Filter>소스 파일\Network\Session</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

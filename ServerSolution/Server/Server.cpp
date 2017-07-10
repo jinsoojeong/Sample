@@ -1,10 +1,10 @@
-// Server.cpp : 콘솔 응용 프로그램에 대한 진입점을 정의합니다.
-//
-
 #include "stdafx.h"
-#include "../LowLib/MiniDump.h"
+#include "ChatServer.h"
+#include "MainProcess.h"
 
-int server_app_start(); 
+BYTE server_app_start();
+bool run_server_iocp();
+bool run_main_process();
 
 int _tmain(int argc, _TCHAR* argv[])
 {
@@ -12,44 +12,78 @@ int _tmain(int argc, _TCHAR* argv[])
 
 	__try
 	{
-		server_app_start();
+		if (server_app_start() == false)
+			return -1;
 	}
 	__except (UnHandledExceptionFilter(GetExceptionInformation()))
 	{
 		Log::ReportLog(L"Detected UnHandled Exception - exeption_code:[%d]", GetExceptionCode());
-		return -1;
+		return -2;
 	}
 
 	return 0;
 }
 
-int server_app_start()
+BYTE server_app_start()
 {
-	HRESULT hr = S_FALSE;
-	unsigned long error_line = 0;
-
-	hr = CoInitializeEx(NULL, COINIT_MULTITHREADED | COINIT_SPEED_OVER_MEMORY);
-	if (FAILED(hr))
-	{
-		Log::ReportLog(L"CoInitializeEx failed");
-		return 0;
-	}
-
 	Log::ReportLog(L"Server Start");
 
+	BYTE error_code = 0;
 	WSADATA WsaData;
 	WSAStartup(MAKEWORD(2, 2), &WsaData);
 
 	Log::ReportLog(L"Server Iocp Start");
 
-	ServerIocp* server_iocp = new ServerIocp();
+	if (run_server_iocp() == false)
+	{
+		error_code = 1;
+		goto FINALIZE;
+	}
+		
+	Log::ReportLog(L"Main Process Start");
 
-	if (server_iocp->Initialize())
-		getchar();
+	if (run_main_process() == false)
+	{
+		error_code = 2;
+		goto FINALIZE;
+	}
 
-	SAFE_DELETE(server_iocp);
+	getchar();
+
+	goto FINALIZE;
+
+FINALIZE:
+	DELETE_MAIN_PROCESS;
+	DELETE_CHAT_SERVER;
+	DELETE_TASK_MANAGER;
+
 	WSACleanup();
-	CoUninitialize();
 
-	return 0;
+	return error_code;
+}
+
+bool run_server_iocp()
+{
+	// ProcessObject를 상속 받은 IOCP 태스크 생성, 생성되는 스레드 0 = 물리코어 * 2
+	if (TASK_MANAGER.CreateTask(TASK_IOCP, 0, &CHAT_SERVER, 0, 0) == false)
+		return false;
+
+	// IOCP 태스트 시작
+	if (TASK_MANAGER.StartTaskJob(TASK_IOCP) == false)
+		return false;
+
+	return true;
+}
+
+bool run_main_process()
+{
+	// ProcessObject를 상속 받은 MainPorcess 태스크 생성, 생성되는 스레드 1
+	if (TASK_MANAGER.CreateTask(TASK_MAIN_PROCESS, 1, &MAIN_PROCESS, 0, 0) == false)
+		return false;
+	
+	// MainProcess 태스트 시작
+	if (TASK_MANAGER.StartTaskJob(TASK_MAIN_PROCESS) == false)
+		return false;
+
+	return true;
 }

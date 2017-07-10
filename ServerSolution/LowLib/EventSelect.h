@@ -1,13 +1,12 @@
 #pragma once
 
-class EventSelect
+class EventSelect : public ProcessObject
 {
 public:
 	EventSelect();
 	virtual ~EventSelect();
 
 	bool Initialize(SOCKET socket);
-	void EventSelectCallback();
 
 protected:
 	virtual void OnIoRead() = 0;
@@ -15,12 +14,14 @@ protected:
 	virtual void OnIoConnected() = 0;
 	virtual void OnIoDisconnected() = 0;
 
-private:
-	HANDLE			select_event_handle_;
-	HANDLE			startup_event_handle_;
-	HANDLE			destroy_event_handle_;
+	void DoWork(void *param) override;
+	void EndWork() override;
 
-	HANDLE			select_thread_handle_;
+private:
+	void Finalize();
+
+	HANDLE			destroy_event_handle_;
+	HANDLE			select_event_handle_;
 
 	SOCKET			socket_;
 };

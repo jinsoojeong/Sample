@@ -25,17 +25,18 @@
 #include <string>
 #include <algorithm>
 #include <sstream>
-
 #include <process.h>
-#include <concurrent_queue.h>
+#include <functional>
+#include <mutex>
 
-#define WIN32_LEAN_AND_MEAN
-#define MAX_BUFFER_LENGTH	4096
-#define MAX_CONFIG_BUFFER	16
-#define SAFE_DELETE(x) { delete x; x = nullptr; }
+#include <concurrent_queue.h>
 
 #include "DataStruct.h"
 #include "Log.h"
+#include "Thread.h"
+#include "ProcessObject.h"
+
+#define SAFE_DELETE(x) { delete x; x = nullptr; }
 
 enum IO_TYPE
 {
@@ -49,4 +50,11 @@ struct OVERLAPPED_EX
 	OVERLAPPED overlapped;
 	IO_TYPE io_type;
 	void *obejct;
+};
+
+enum TASK_ID
+{
+	TASK_IOCP = 100,
+	TASK_EVENT_SELECT,
+	TASK_MAIN_PROCESS
 };

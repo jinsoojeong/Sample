@@ -1,13 +1,10 @@
 #include "stdafx.h"
-#include "CriticalSection.h"
 #include "ThreadSync.h"
 #include "Msg.h"
 
-Msg::Msg(DWORD protocol_id)
+Msg::Msg(DWORD protocol_id) : session_id_(0), offset_(0), protocol_id_(protocol_id)
 {
 	buffer_ = new BYTE[MAX_BUFFER_LENGTH];
-	protocol_id_ = protocol_id;
-	offset_ = 0;
 }
 
 bool Msg::ReadDWORD(DWORD *data)

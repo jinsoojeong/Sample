@@ -15,7 +15,7 @@ inline void READ_PT_REG_USER_ACK(Msg *msg, REG_USER_ACK &parameter)
 	
 	parameter.connect_users.resize(parameter.connect_user_count);
 
-	for (int i = 0; i < parameter.connect_user_count; i++)
+	for (DWORD i = 0; i < parameter.connect_user_count; i++)
 		*msg >> parameter.connect_users[i];
 }
 

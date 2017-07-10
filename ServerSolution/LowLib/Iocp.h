@@ -1,6 +1,6 @@
 #pragma once
 
-class Iocp
+class Iocp : public ProcessObject
 {
 public:
 	Iocp();
@@ -8,7 +8,6 @@ public:
 
 	bool Initialize(SOCKET socket, ULONGLONG completion_key);
 	bool RegistSocket(SOCKET socket, ULONGLONG completionKey);
-	void IOCPCallback();
 
 protected:
 	virtual void OnIoRead(void *object, DWORD dataLength) = 0;
@@ -16,12 +15,13 @@ protected:
 	virtual void OnIoConnected(void *object) = 0;
 	virtual void OnIoDisconnected(void *object) = 0;
 
+	void DoWork(void *param) override;
+	void EndWork() override;
+
 private:
-	typedef std::vector<HANDLE> WORKER_THREADS;
-	WORKER_THREADS worker_threads_;
+	void Finalize();
 
 	HANDLE iocp_handle_;
-	HANDLE startup_event_handle_;
-	DWORD worker_thread_count_;
+	SOCKET socket_;
 };
 

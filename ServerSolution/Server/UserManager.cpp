@@ -1,6 +1,6 @@
 #include "stdafx.h"
-#include "UserManager.h"
 #include "User.h"
+#include "UserManager.h"
 
 UserManager::UserManager() : identity_id_(0)
 {
@@ -8,18 +8,17 @@ UserManager::UserManager() : identity_id_(0)
 
 UserManager::~UserManager()
 {
-	TS_CRETICAL_SECSION sc;
-
-	for (Users::iterator itor = users_.begin() ; itor != users_.end(); itor++)
-		SAFE_DELETE(itor->second);
-
-	users_.clear();
+	Finalize();
 }
 
-bool UserManager::RegistUser(const DWORD id, const std::wstring& nick)
+void UserManager::Update(ULONGLONG current_tick)
 {
-	TS_CRETICAL_SECSION sc;
+	for each(const Users::value_type& user in users_)
+		(*user.second).Update(current_tick);
+}
 
+bool UserManager::RegistUser(const DWORD session_id, const DWORD id, const std::wstring& nick)
+{
 	Users::iterator itor = users_.find(id);
 	if (itor != users_.end())
 		return false;
@@ -29,14 +28,13 @@ bool UserManager::RegistUser(const DWORD id, const std::wstring& nick)
 		return false;
 
 	users_.insert(Users::value_type(user->GetID(), user));
+	session_user_ids_.insert(SessionUserIDs::value_type(session_id, user->GetID()));
 
 	return true;
 }
 
 bool UserManager::UnRegistUser(const DWORD id)
 {
-	TS_CRETICAL_SECSION sc;
-
 	Users::iterator itor = users_.find(id);
 	if (itor == users_.end())
 		return false;
@@ -48,8 +46,6 @@ bool UserManager::UnRegistUser(const DWORD id)
 
 User* UserManager::FindUser(DWORD user_id)
 {
-	TS_CRETICAL_SECSION sc;
-
 	Users::iterator itor = users_.find(user_id);
 	if (itor == users_.end())
 		return nullptr;
@@ -57,10 +53,17 @@ User* UserManager::FindUser(DWORD user_id)
 	return (*itor).second;
 }
 
+User* UserManager::FindUser(DWORD session_id, bool)
+{
+	SessionUserIDs::iterator itor = session_user_ids_.find(session_id);
+	if (itor == session_user_ids_.end())
+		return nullptr;
+
+	return FindUser((*itor).second);
+}
+
 bool UserManager::UserCertify(const std::wstring& id, const std::wstring& pw, DWORD& user_id)
 {
-	TS_CRETICAL_SECSION sc;
-
 	CertUsers::iterator itor = cert_users_.find(id);
 	if (itor != cert_users_.end())
 	{
@@ -84,9 +87,35 @@ void UserManager::BuildMsg(Msg* msg, User *user)
 	{
 		*msg << (DWORD)users_.size();
 
-		for each(Users::value_type itor in users_)
+		for each(const Users::value_type& itor in users_)
 			*msg << itor.second->GetNick();
 	}
 	break;
 	}
+}
+
+void UserManager::BroadCast(Msg *msg, const DWORD except_user)
+{
+	for each (const Users::value_type& itor in users_)
+	{
+		if (except_user == itor.first)
+			continue;
+
+		User *user = itor.second;
+		if (user == nullptr)
+		{
+			Log::ReportLog(L"BroadCast Fatal Warnning - find invalid user point");
+			continue;
+		}
+
+		user->SendMsg(msg, true);
+	}
+
+	SAFE_DELETE(msg);
+}
+
+void UserManager::Finalize()
+{
+	for (Users::iterator itor = users_.begin(); itor != users_.end(); itor++)
+		SAFE_DELETE(itor->second);
 }

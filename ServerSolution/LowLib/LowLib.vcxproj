@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
       <Configuration>Debug</Configuration>
@@ -28,22 +28,22 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <CharacterSet>MultiByte</CharacterSet>
-    <PlatformToolset>v140</PlatformToolset>
+    <PlatformToolset>v141</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <CharacterSet>MultiByte</CharacterSet>
-    <PlatformToolset>v140</PlatformToolset>
+    <PlatformToolset>v141</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <CharacterSet>Unicode</CharacterSet>
-    <PlatformToolset>v140</PlatformToolset>
+    <PlatformToolset>v141</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <CharacterSet>Unicode</CharacterSet>
-    <PlatformToolset>v140</PlatformToolset>
+    <PlatformToolset>v141</PlatformToolset>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -143,17 +143,22 @@
     <ClCompile Include="IniReader.cpp" />
     <ClCompile Include="Iocp.cpp" />
     <ClCompile Include="MiniDump.cpp" />
-    <ClCompile Include="Network.cpp" />
-    <ClCompile Include="NetworkPacket.cpp" />
+    <ClCompile Include="Session.cpp" />
+    <ClCompile Include="SessionManager.cpp" />
+    <ClCompile Include="SockSystem.cpp" />
+    <ClCompile Include="PacketSystem.cpp" />
     <ClCompile Include="Msg.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="Task.cpp" />
+    <ClCompile Include="TaskManager.cpp" />
+    <ClCompile Include="Thread.cpp" />
+    <ClCompile Include="ThreadManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AutodetectMemoryLeak.h" />
     <ClInclude Include="CircularLinkedList.h" />
-    <ClInclude Include="CriticalSection.h" />
     <ClInclude Include="Deque.h" />
     <ClInclude Include="EventSelect.h" />
     <ClInclude Include="IniReader.h" />
@@ -162,9 +167,16 @@
     <ClInclude Include="Log.h" />
     <ClInclude Include="MemoryPool.h" />
     <ClInclude Include="MiniDump.h" />
+    <ClInclude Include="ProcessObject.h" />
+    <ClInclude Include="Session.h" />
+    <ClInclude Include="SessionManager.h" />
+    <ClInclude Include="Task.h" />
+    <ClInclude Include="TaskManager.h" />
+    <ClInclude Include="Thread.h" />
+    <ClInclude Include="ThreadManager.h" />
     <ClInclude Include="ThreadSync.h" />
-    <ClInclude Include="Network.h" />
-    <ClInclude Include="NetworkPacket.h" />
+    <ClInclude Include="SockSystem.h" />
+    <ClInclude Include="PacketSystem.h" />
     <ClInclude Include="DataStruct.h" />
     <ClInclude Include="Queue.h" />
     <ClInclude Include="Singleton.h" />

@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "MiniDump.h"
 
-typedef BOOL(WINAPI *MINIDUMPWRITEDUMP)(
+typedef bool(WINAPI *MINIDUMPWRITEDUMP)(
 	HANDLE hProcess,
 	DWORD dwPid,
 	HANDLE hFile,
@@ -48,8 +48,7 @@ extern int UnHandledExceptionFilter(struct _EXCEPTION_POINTERS *exception_Info)
 		MiniDumpExceptionInfo.ExceptionPointers = exception_Info;
 		MiniDumpExceptionInfo.ClientPointers = NULL;
 
-		bool result = dump(GetCurrentProcess(), GetCurrentProcessId(), create_file,
-			MiniDumpNormal, &MiniDumpExceptionInfo, NULL, NULL);
+		bool result = dump(GetCurrentProcess(), GetCurrentProcessId(), create_file, MiniDumpNormal, &MiniDumpExceptionInfo, NULL, NULL);
 
 		CloseHandle(create_file);
 

@@ -1,0 +1,11 @@
+﻿F:\VisualStudio2017\Common7\IDE\VC\VCTargets\Microsoft.CppBuild.targets(373,5): warning MSB8004: Output 디렉터리가 슬래시로 끝나지 않습니다. Output 디렉터리의 적절한 평가를 허용하는 데 필요하므로 이 빌드 인스턴스에서 슬래시를 추가합니다.
+  stdafx.cpp
+c:\program files (x86)\windows kits\8.1\include\um\dbghelp.h(1544): warning C4091: 'typedef ': 변수를 선언하지 않으면 '' 왼쪽은 무시됩니다.
+c:\program files (x86)\windows kits\8.1\include\um\dbghelp.h(3190): warning C4091: 'typedef ': 변수를 선언하지 않으면 '' 왼쪽은 무시됩니다.
+  TestClientDlg.cpp
+  TestClient.cpp
+  ClientSession.cpp
+  ClientNet.cpp
+  코드를 생성하고 있습니다...
+  TestClient.vcxproj -> C:\Users\JJS\Desktop\Work\ServerSolution\TestClient\../BIN/Client\TestClient.exe
+  TestClient.vcxproj -> ../BIN/Client\TestClient.pdb (Partial PDB)

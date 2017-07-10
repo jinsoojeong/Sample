@@ -1,7 +1,6 @@
 #include "stdafx.h"
-#include "CriticalSection.h"
-#include "Network.h"
-#include "NetworkPacket.h"
+#include "SockSystem.h"
+#include "PacketSystem.h"
 #include "ClientNet.h"
 #include "EventSelect.h"
 #include "Msg.h"
@@ -13,26 +12,26 @@ ClientNet::ClientNet()
 
 ClientNet::~ClientNet()
 {
-	SAFE_DELETE(network_packet_);
+	SAFE_DELETE(packet_system_);
 }
 
-bool ClientNet::Initialize(std::string& ip, WORD port)
+bool ClientNet::Initialize(const std::string& ip, WORD port)
 {
 	if (ip.empty() || port <= 0)
 		return false;
 
-	network_packet_ = new NetworkPacket();
+	packet_system_ = new PacketSystem();
 
-	if (!network_packet_->Initialize())
+	if (!packet_system_->Initialize(this, 0))
 		return false;
 
-	if (!network_packet_->CreateSocket())
+	if (!packet_system_->Create())
 		return false;
 
-	if (!EventSelect::Initialize(network_packet_->GetSocket()))
+	if (!EventSelect::Initialize(packet_system_->GetSocket()))
 		return false;
 
-	if (!network_packet_->Connect(ip, port))
+	if (!packet_system_->Connect(ip, port))
 		return false;
 
 	return true;
@@ -40,20 +39,20 @@ bool ClientNet::Initialize(std::string& ip, WORD port)
 
 bool ClientNet::GetIP(std::string& ip)
 {
-	return network_packet_->GetIP(ip);
+	return packet_system_->GetIP(ip);
 }
 
 WORD ClientNet::GetPort()
 {
-	return network_packet_->GetPort();
+	return packet_system_->GetPort();
 }
 
 bool ClientNet::SendMsg(Msg* msg)
 {
-	if (!network_packet_->SendMsg(msg))
+	if (!packet_system_->SendMsg(msg))
 		return false;
 
-	if (!network_packet_->SendComplete())
+	if (!packet_system_->SendComplete())
 		return false;
 
 	return true;
@@ -63,7 +62,7 @@ Msg* ClientNet::GetMsg()
 {
 	Msg* msg = nullptr;
 
-	if (read_msg_queue_.try_pop(msg) == false)
+	if (client_msg_queue_.try_pop(msg) == false)
 		return nullptr;
 
 	return msg;
@@ -73,14 +72,14 @@ void ClientNet::OnIoRead()
 {
 	Msg* msg = nullptr;
 
-	if (network_packet_->RecvbyEventSelect())
+	if (packet_system_->RecvByEventSelect())
 	{
-		while (network_packet_->GetMsg(msg))
+		while (packet_system_->GetMsg(msg))
 		{
 			if (msg == nullptr)
 				return;
 
-			read_msg_queue_.push(msg);	
+			client_msg_queue_.push(msg);
 			MsgHandle();
 		}		
 	}

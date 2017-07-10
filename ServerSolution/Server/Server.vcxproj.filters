@@ -19,17 +19,14 @@
     <Filter Include="소스 파일\Main">
       <UniqueIdentifier>{17c2d5c3-1ed4-4eb8-85f2-9b377633bc16}</UniqueIdentifier>
     </Filter>
-    <Filter Include="소스 파일\Main\ConnectedSession">
-      <UniqueIdentifier>{2db43311-4ca0-45f0-8894-6ab1fc7f468c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="소스 파일\Main\ServerIocp">
-      <UniqueIdentifier>{55280f9e-05dd-4477-aa4f-1eed625a46c8}</UniqueIdentifier>
-    </Filter>
     <Filter Include="소스 파일\Content">
       <UniqueIdentifier>{30931496-ecae-4273-a472-654c5afdaeec}</UniqueIdentifier>
     </Filter>
     <Filter Include="소스 파일\Content\User">
       <UniqueIdentifier>{a6d5e26d-8373-41d6-b1d8-d51f7a400472}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\Main\ChatServer">
+      <UniqueIdentifier>{55280f9e-05dd-4477-aa4f-1eed625a46c8}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -39,34 +36,25 @@
     <ClCompile Include="stdafx.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="ServerIocp.cpp">
-      <Filter>소스 파일\Main\ServerIocp</Filter>
-    </ClCompile>
-    <ClCompile Include="SessionManager.cpp">
-      <Filter>소스 파일\Main\ConnectedSession</Filter>
-    </ClCompile>
     <ClCompile Include="User.cpp">
       <Filter>소스 파일\Content\User</Filter>
     </ClCompile>
     <ClCompile Include="UserManager.cpp">
       <Filter>소스 파일\Content\User</Filter>
     </ClCompile>
-    <ClCompile Include="Session.cpp">
-      <Filter>소스 파일\Main\ConnectedSession</Filter>
+    <ClCompile Include="MainProcess.cpp">
+      <Filter>소스 파일\Main</Filter>
     </ClCompile>
-    <ClCompile Include="SessionMsgHandler.cpp">
-      <Filter>소스 파일\Main\ConnectedSession</Filter>
+    <ClCompile Include="ChatServer.cpp">
+      <Filter>소스 파일\Main\ChatServer</Filter>
+    </ClCompile>
+    <ClCompile Include="UserMsgHandler.cpp">
+      <Filter>소스 파일\Content\User</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
       <Filter>소스 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="ServerIocp.h">
-      <Filter>소스 파일\Main\ServerIocp</Filter>
-    </ClInclude>
-    <ClInclude Include="SessionManager.h">
-      <Filter>소스 파일\Main\ConnectedSession</Filter>
     </ClInclude>
     <ClInclude Include="..\CommonFile\Protocol.h">
       <Filter>소스 파일\Common</Filter>
@@ -83,11 +71,14 @@
     <ClInclude Include="..\CommonFile\PT_ErrorCode.h">
       <Filter>소스 파일\Common</Filter>
     </ClInclude>
-    <ClInclude Include="Session.h">
-      <Filter>소스 파일\Main\ConnectedSession</Filter>
-    </ClInclude>
     <ClInclude Include="..\CommonFile\PT_ReadMsg.h">
       <Filter>소스 파일\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="MainProcess.h">
+      <Filter>소스 파일\Main</Filter>
+    </ClInclude>
+    <ClInclude Include="ChatServer.h">
+      <Filter>소스 파일\Main\ChatServer</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
